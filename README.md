@@ -91,7 +91,7 @@ Given these requirements, the chance of a false-positive replacement in the midd
 
 > ロイ・アルファルド => ロイ・Al ファルド
 
-The simplest way to mediate this would be to include more names in the replacement table. Additionally, a fourth condition could be added before splitting a word, namely that once the word is split, the remaining text must also consist of other katakana words or known names.
+The simplest way to remediate this would be to include more names in the replacement table. Additionally, a fourth condition could be added before splitting a word, namely that once the word is split, the remaining text must also consist of other katakana words or known names.
 
 **Katakana Word Lists:**
 

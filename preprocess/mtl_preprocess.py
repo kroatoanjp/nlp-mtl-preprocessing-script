@@ -44,17 +44,23 @@ class Names(Flag):
 
 Character = namedtuple('Character', 'jp_name en_name')
 
-SINGLE_KANJI_FILTER=True
 JP_NAME_SEPS = ["・", ""]
 
 class MTL_Preprocess:
-    def __init__(self, text, replacement=None, verbose=False):
+    def __init__(
+            self, 
+            text, 
+            replacement=None, 
+            single_kanji_filter=True,
+            verbose=False
+        ):
         self.text = text
         if not replacement:
             replacement = {}
         self.rep = replacement
         self.total_replacements = 0
         self.verbose = verbose
+        self.single_kanji_filter = single_kanji_filter
         
 
 
@@ -122,7 +128,7 @@ class MTL_Preprocess:
                     f'{nen}-{hon_en}'
                 )
             if no_honor:
-                if len(njp) > 1 or not SINGLE_KANJI_FILTER:
+                if len(njp) > 1 or not self.single_kanji_filter:
                     data['NA'] = self.replace_single_word(njp, nen)
 
             total = sum(data.values())

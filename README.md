@@ -94,5 +94,6 @@ Given these requirements, the chance of a false-positive replacement in the midd
 The simplest way to mediate this would be to include more names in the replacement table. Additionally, a fourth condition could be added before splitting a word, namely that once the word is split, the remaining text must also consist of other katakana words or known names.
 
 **Katakana Word Lists:**
-Leeds Corpus - http://corpus.leeds.ac.uk/frqc/internet-jp-forms.num
-Katakana Core 10k - https://ankiweb.net/shared/info/1723626457
+
+* Leeds Corpus - http://corpus.leeds.ac.uk/frqc/internet-jp-forms.num
+* Katakana Core 10k - https://ankiweb.net/shared/info/1723626457

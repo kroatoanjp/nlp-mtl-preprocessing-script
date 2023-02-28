@@ -18,8 +18,8 @@ The `basic` preprocessor is a copy the original preprocessor.
 
 ```bash
 # Run in plain-text replacement mode
-# python3 -m preprocess.preprocesor basic [-h] [-v] [--disable_single_kanji_filter] input_file replacement_json
-python3 -m preprocess.preprocesor basic ch100.txt replacement_table/rezero.json
+# python3 -m preprocess.preprocessor basic [-h] [-v] [--disable_single_kanji_filter] input_file replacement_json
+python3 -m preprocess.preprocessor basic ch100.txt replacement_table/rezero.json
 ```
 
 ### NLP Usage
@@ -29,7 +29,7 @@ In order to avoid unintentional replacements as well as increase the accuracy of
 Before preprocessing chapters in `nlp` mode, first run `nlp setup`
 
 ```bash
-python3 -m preprocess.preprocesor nlp setup
+python3 -m preprocess.preprocessor nlp setup
 # Sample Setup
 # [?] Select tokenizer: fugashi
 # [?] Path to replacement table json: replacement_table/rezero.json
@@ -54,8 +54,8 @@ Once setup is complete, preprocessing chapters is relatively simple
 
 ```bash
 # Run in NLP replacement mode
-# python3 -m preprocess.preprocesor nlp run [-h] [-v] input_file
-python3 -m preprocess.preprocesor nlp run ch100.txt
+# python3 -m preprocess.preprocessor nlp run [-h] [-v] input_file
+python3 -m preprocess.preprocessor nlp run ch100.txt
 ```
 
 ### Custom Dictionary Usage

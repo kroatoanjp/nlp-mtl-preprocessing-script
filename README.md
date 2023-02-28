@@ -19,7 +19,7 @@ The `basic` preprocessor is a copy the original preprocessor.
 ```bash
 # Run in plain-text replacement mode
 # python3 -m preprocess.preprocesor basic [-h] [-v] [--disable_single_kanji_filter] input_file replacement_json
-python3 -m preprocess.preprocesor basic ch100.txt
+python3 -m preprocess.preprocesor basic ch100.txt replacement_table/rezero.json
 ```
 
 ### NLP Usage

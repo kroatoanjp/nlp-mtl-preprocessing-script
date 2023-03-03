@@ -44,7 +44,7 @@ python3 -m preprocess.preprocessor nlp setup
 
 #### Setup options:
 
--   `PREPROCESSOR_TOKENIZER`: Tokenization is currently supported with `spacy` (recommended), `sudachi`, and `fugashi` .
+-   `PREPROCESSOR_TOKENIZER`: Tokenization is currently supported with `spacy` (recommended ), `sudachi`, and `fugashi` .
 -   `PREPROCESSOR_REPLACEMENT_TABLE_JSON`: Path to the replacement table file. Same as what would be used with the old preprocessor. Use `replacement_table/rezero.json` for Re:Zero.
 -   `PREPROCESSOR_TAG_POTENTIAL_PROPER_NOUNS`: If `True`, will split apart katakana words that likely contain names. Does cause some false-positive replacements, but will greatly reduce the false-negative rate for strings that contain katakana names.
 -   `PREPROCESSOR_USE_SINGLE_KANJI_FILTER`: If `True`, will skip all replacements for names that only 1 character. A holdover from the old preprocessor that was seemingly used to avoid accidentally replacing parts of random words, but is not longer strictly necessary in the NLP version.

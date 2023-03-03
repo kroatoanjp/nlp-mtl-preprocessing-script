@@ -101,7 +101,7 @@ def parse_args():
          help="Build a Sudachi user dictionary"
     )
     tools_build_sudachi_dict_parser.add_argument("replacement_json")
-    tools_build_sudachi_dict_parser.add_argument("dictionary_source_directory")
+    tools_build_sudachi_dict_parser.add_argument("dictionary_source_file")
     return parser.parse_args()
 
 def run_basic_mtl_preprocessor(args):
@@ -229,7 +229,7 @@ def build_mecab_dict(args):
 def build_sudachi_dict(args):
     replacement_table = load_replacement_table(args.replacement_json)
     dict_generator = SudachiDictGenerator(
-        dictionary_source_directory=args.dictionary_source_directory,
+        dictionary_source_file=args.dictionary_source_file,
         replacement_table=replacement_table
     )
     dict_generator.generate()

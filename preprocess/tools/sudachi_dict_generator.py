@@ -10,10 +10,10 @@ DICT_OUTPUT_FOLDER = "data/dictionaries"
 
 class SudachiDictGenerator:
     def __init__(self, 
-            dictionary_source_directory:str, 
+            dictionary_source_file:str, 
             replacement_table
         ):
-        self.dictionary_source_directory = dictionary_source_directory
+        self.dictionary_source_file = dictionary_source_file
         self.replacement_table = replacement_table
 
     # Generate mecab user dictionary csv of katakana names 
@@ -43,6 +43,6 @@ class SudachiDictGenerator:
         new_dictionary_path = f"{DICT_OUTPUT_FOLDER}/{file_stem}.dic"
         subprocess.run([
             'sudachipy', "ubuild", "-o", new_dictionary_path, "-s", 
-            self.dictionary_source_directory, csv_file_name
+            self.dictionary_source_file, csv_file_name
         ])
         print(f"Dictionary written to: {new_dictionary_path}")

@@ -1,3 +1,4 @@
+
 # NLP MTL Preprocessing Script
 
 Integrates a JP tokenizer into @thevoidzero's original [MTL preprocessing script](https://github.com/Atreyagaurav/mtl-related-scripts) to avoid unintentional substitutions.
@@ -41,7 +42,7 @@ python3 -m preprocess.preprocessor nlp setup
 
 #### Setup options:
 
--   `PREPROCESSOR_TOKENIZER`:  Tokenization is currently supported with `spacy` (recommended for Re:Zero), `sudachi`, and `fugashi` . 
+-   `PREPROCESSOR_TOKENIZER`:  Tokenization is currently supported with `spacy` (recommended for Re:Zero), `sudachi`, and `fugashi` .  A brief comparison of the tokenizers can be found [here](https://github.com/kroatoanjp/nlp-mtl-preprocessing-script#tokenizer-comparison).
 -   `PREPROCESSOR_REPLACEMENT_TABLE_JSON`: Path to the replacement table file. Same as what would be used with the old preprocessor. Use `replacement_table/rezero.json` for Re:Zero.
 -   `PREPROCESSOR_TAG_POTENTIAL_PROPER_NOUNS`: If `True`, will split apart katakana words that likely contain names. Does cause some false-positive replacements, but will greatly reduce the false-negative rate for strings that contain katakana names.
 -   `PREPROCESSOR_USE_SINGLE_KANJI_FILTER`: If `True`, will skip all replacements for names that only 1 character. A holdover from the old preprocessor that was seemingly used to avoid accidentally replacing parts of random words, but is not longer strictly necessary in the NLP version.
@@ -114,4 +115,6 @@ The simplest way to remediate this would be to include more names in the replace
 * Katakana Core 10k - https://ankiweb.net/shared/info/1723626457
 
 ### Tokenizer Comparison
-Diffs for the outputs of the different preprocess modes when run on a large subset of Re:Zero WN chapters can be found [here](https://github.com/kroatoanjp/nlp-mtl-preprocessing-script/tree/master/benchmarks/rezero).
+At a high level, the accuracy of all three tokenizers is relatively comparable. However, when both are provided with user dictionaries, Sudachi is better than Fugashi at handling katakana names. Spacy uses Sudachi for tokenization, so the difference between the two when it comes to word-boundary detection for katakana names is negligible. However, Spacy did offer better part of speech identification when it came to kanji names (at least for the few in Re:Zero). This improvement does come at the cost of being an order of magnitude slower than both Fugashi and Sudachi, but Spacy is still recommended since performance is unlikely to be a major concern in this context.
+
+Diffs for the outputs of the different preprocess modes when run on a large subset of Re:Zero WN chapters can be found [here](https://github.com/kroatoanjp/nlp-mtl-preprocessing-script/tree/master/benchmarks/rezero). (Similar diffs are available for a smaller sample of COTE chapters [here](https://github.com/kroatoanjp/nlp-mtl-preprocessing-script/tree/master/benchmarks/cote). However the validity of these tests is questionable due to the inlining of furigana.)

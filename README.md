@@ -8,9 +8,6 @@ Integrates a JP tokenizer into @thevoidzero's original [MTL preprocessing script
 pip3 install -r requirements.txt
 # Using fugashi for tokenization requires installing Unidic
 python3 -m unidic download
-# Using spaCy for tokenization requires separate download of 
-# one of their processing pipelines
-python3 -m spacy download ja_core_news_lg
 ```
 
 ## Usage

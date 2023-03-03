@@ -113,5 +113,5 @@ The simplest way to remediate this would be to include more names in the replace
 * Leeds Corpus - http://corpus.leeds.ac.uk/frqc/internet-jp-forms.num
 * Katakana Core 10k - https://ankiweb.net/shared/info/1723626457
 
-#### Tokenizer Comparison
+### Tokenizer Comparison
 Diffs for the outputs of the different preprocess modes when run on a large subset of Re:Zero WN chapters can be found [here](https://github.com/kroatoanjp/nlp-mtl-preprocessing-script/tree/master/benchmarks/rezero).

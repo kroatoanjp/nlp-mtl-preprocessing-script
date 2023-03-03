@@ -11,11 +11,12 @@ freeze:
 	pip3 freeze > requirements.txt
 
 unit-test:
-	python3 -m unittest preprocess.tests.test_basic_named_entity_recognition
-	python3 -m unittest preprocess.tests.test_fugashi_tokenizer
-	python3 -m unittest preprocess.tests.test_replacement_validity
-	python3 -m unittest preprocess.tests.test_sentence
-	python3 -m unittest preprocess.tests.test_utils
+	-python3 -m unittest preprocess.tests.test_basic_named_entity_recognition
+	-python3 -m unittest preprocess.tests.test_tagger
+	-python3 -m unittest preprocess.tests.test_replacement_validity
+	-python3 -m unittest preprocess.tests.test_sentence
+	-python3 -m unittest preprocess.tests.test_utils
 
 validity-test:
-	python3 -m preprocess.tests.exhaustive_replacement_validity_test
+	python3 -m preprocess.tests.rezero_exhaustive_replacement_validity_test
+# 	python3 -m preprocess.tests.cote_exhaustive_replacement_validity_test

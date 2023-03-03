@@ -1,5 +1,6 @@
-generated-mecab-dict-csv/
-
+preprocess/tests/docs/cote/
+generated-*-dict-csv/
+sudachi.json
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]

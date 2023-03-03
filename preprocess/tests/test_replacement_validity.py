@@ -3,6 +3,9 @@ import unittest
 
 from preprocess.nlp_mtl_preprocess import NLP_MTL_Preprocess
 from preprocess.tokenizer.fugashi_tokenizer import FugashiTokenizer
+from preprocess.tokenizer.spacy_tokenizer import SudachiTokenizer
+from preprocess.tokenizer.spacy_tokenizer import SpacyTokenizer
+from preprocess.tagger import Tagger
 
 class ReplacementValidityTestCase(unittest.TestCase):
 
@@ -16,15 +19,16 @@ class ReplacementValidityTestCase(unittest.TestCase):
         text = "『あいうえお』"
         expected = "«あいうえお»"
         name_list = NLP_MTL_Preprocess.generate_name_list_from_replacement_table(replacement_table)
-        tokenizer = FugashiTokenizer(proper_noun_list=name_list)
-        preprocess = NLP_MTL_Preprocess(
-            text=text, 
-            tokenizer=tokenizer,
-            replacement_table=replacement_table
-        )
-
-        actual = preprocess.replace()
-        self.assertEqual(actual, expected)
+        for tokenizer_name, tokenizer in get_tokenizers():
+            tagger = Tagger(tokenizer=tokenizer, proper_noun_list=name_list)
+            preprocess = NLP_MTL_Preprocess(
+                text=text, 
+                tagger=tagger,
+                replacement_table=replacement_table
+            )
+            with self.subTest(tokenizer_name=tokenizer_name):
+                actual = preprocess.replace()
+                self.assertEqual(actual, expected) 
 
     def test_successful_name_replacement(self):
         replacement_table = {
@@ -35,14 +39,16 @@ class ReplacementValidityTestCase(unittest.TestCase):
         text = "「お前、一人なの？　アルとかクソ野郎とか可愛い執事くんとかは？」"
         expected = "「お前、一人なの？　Alとかクソ野郎とか可愛い執事くんとかは？」"
         name_list = NLP_MTL_Preprocess.generate_name_list_from_replacement_table(replacement_table)
-        tokenizer = FugashiTokenizer(proper_noun_list=name_list)
-        preprocess = NLP_MTL_Preprocess(
-            text=text, 
-            tokenizer=tokenizer,
-            replacement_table=replacement_table
-        )
-        actual = preprocess.replace()
-        self.assertEqual(actual, expected)    
+        for tokenizer_name, tokenizer in get_tokenizers():
+            tagger = Tagger(tokenizer=tokenizer, proper_noun_list=name_list)
+            preprocess = NLP_MTL_Preprocess(
+                text=text, 
+                tagger=tagger,
+                replacement_table=replacement_table
+            )
+            with self.subTest(tokenizer_name=tokenizer_name):
+                actual = preprocess.replace()
+                self.assertEqual(actual, expected)    
 
     def test_skips_partial_match_name_replacement(self):
         replacement_table = {
@@ -53,14 +59,16 @@ class ReplacementValidityTestCase(unittest.TestCase):
         text = "「思ったより、幻想的な感じじゃないな……がっかりなリアル感だ」"
         expected = "「思ったより、幻想的な感じじゃないな……がっかりなリアル感だ」"
         name_list = NLP_MTL_Preprocess.generate_name_list_from_replacement_table(replacement_table)
-        tokenizer = FugashiTokenizer(proper_noun_list=name_list)
-        preprocess = NLP_MTL_Preprocess(
-            text=text, 
-            tokenizer=tokenizer,
-            replacement_table=replacement_table
-        )
-        actual = preprocess.replace()
-        self.assertEqual(actual, expected)
+        for tokenizer_name, tokenizer in get_tokenizers():
+            tagger = Tagger(tokenizer=tokenizer, proper_noun_list=name_list)
+            preprocess = NLP_MTL_Preprocess(
+                text=text, 
+                tagger=tagger,
+                replacement_table=replacement_table
+            )
+            with self.subTest(tokenizer_name=tokenizer_name):
+                actual = preprocess.replace()
+                self.assertEqual(actual, expected)
 
     # Test is redundant but keeping it anyway
     # since the イライラ issue has shown up in arc 7
@@ -73,14 +81,16 @@ class ReplacementValidityTestCase(unittest.TestCase):
         text = "「……なに、その顔。あんたのその顔、イライラする」"
         expected = "「……なに、その顔。あんたのその顔、イライラする」"
         name_list = NLP_MTL_Preprocess.generate_name_list_from_replacement_table(replacement_table)
-        tokenizer = FugashiTokenizer(proper_noun_list=name_list)
-        preprocess = NLP_MTL_Preprocess(
-            text=text, 
-            tokenizer=tokenizer,
-            replacement_table=replacement_table
-        )
-        actual = preprocess.replace()
-        self.assertEqual(actual, expected)
+        for tokenizer_name, tokenizer in get_tokenizers():
+            tagger = Tagger(tokenizer=tokenizer, proper_noun_list=name_list)
+            preprocess = NLP_MTL_Preprocess(
+                text=text, 
+                tagger=tagger,
+                replacement_table=replacement_table
+            )
+            with self.subTest(tokenizer_name=tokenizer_name):
+                actual = preprocess.replace()
+                self.assertEqual(actual, expected)
 
 
     # This test is a reflection of the behavior of the original 
@@ -97,14 +107,16 @@ class ReplacementValidityTestCase(unittest.TestCase):
         expected = "その曇りなき白い刀身を目の当たりにするのは、剣士の誉れである" + \
             "『ヴァン』の名を頂いたWilhelmですら、生涯でたった三度目のことだった。"
         name_list = NLP_MTL_Preprocess.generate_name_list_from_replacement_table(replacement_table)
-        tokenizer = FugashiTokenizer(proper_noun_list=name_list)
-        preprocess = NLP_MTL_Preprocess(
-            text=text, 
-            tokenizer=tokenizer,
-            replacement_table=replacement_table
-        )
-        actual = preprocess.replace()
-        self.assertEqual(actual, expected)
+        for tokenizer_name, tokenizer in get_tokenizers():
+            tagger = Tagger(tokenizer=tokenizer, proper_noun_list=name_list)
+            preprocess = NLP_MTL_Preprocess(
+                text=text, 
+                tagger=tagger,
+                replacement_table=replacement_table
+            )
+            with self.subTest(tokenizer_name=tokenizer_name):
+                actual = preprocess.replace()
+                self.assertEqual(actual, expected)
 
     def test_successful_single_kanji_name_replacement(self):
         replacement_table = {
@@ -118,15 +130,17 @@ class ReplacementValidityTestCase(unittest.TestCase):
         text = "不思議と恵のことを聞いてきた直後の方が"
         expected = "不思議とKeiのことを聞いてきた直後の方が"
         name_list = NLP_MTL_Preprocess.generate_name_list_from_replacement_table(replacement_table)
-        tokenizer = FugashiTokenizer(proper_noun_list=name_list)
-        preprocess = NLP_MTL_Preprocess(
-            text=text, 
-            tokenizer=tokenizer,
-            replacement_table=replacement_table,
-            single_kanji_filter=False
-        )
-        actual = preprocess.replace()
-        self.assertEqual(actual, expected) 
+        for tokenizer_name, tokenizer in get_tokenizers():
+            tagger = Tagger(tokenizer=tokenizer, proper_noun_list=name_list)
+            preprocess = NLP_MTL_Preprocess(
+                text=text, 
+                tagger=tagger,
+                replacement_table=replacement_table,
+                single_kanji_filter=False
+            )
+            with self.subTest(tokenizer_name=tokenizer_name):
+                actual = preprocess.replace()
+                self.assertEqual(actual, expected) 
 
     def test_successful_katakana_phrase_name_replacement(self):
         replacement_table = {
@@ -137,14 +151,16 @@ class ReplacementValidityTestCase(unittest.TestCase):
         text = "ああ……『血命の儀』と『アラキアパニック』ですわね。"
         expected = "ああ……『血命の儀』と『Arakiyaパニック』ですわね。"
         name_list = NLP_MTL_Preprocess.generate_name_list_from_replacement_table(replacement_table)
-        tokenizer = FugashiTokenizer(proper_noun_list=name_list)
-        preprocess = NLP_MTL_Preprocess(
-            text=text, 
-            tokenizer=tokenizer,
-            replacement_table=replacement_table
-        )
-        actual = preprocess.replace()
-        self.assertEqual(actual, expected) 
+        for tokenizer_name, tokenizer in get_tokenizers():
+            tagger = Tagger(tokenizer=tokenizer, proper_noun_list=name_list)
+            preprocess = NLP_MTL_Preprocess(
+                text=text, 
+                tagger=tagger,
+                replacement_table=replacement_table
+            )
+            with self.subTest(tokenizer_name=tokenizer_name):
+                actual = preprocess.replace()
+                self.assertEqual(actual, expected) 
 
     def test_skips_non_noun_single_kanji_name_replacement(self):
         replacement_table = {
@@ -158,14 +174,23 @@ class ReplacementValidityTestCase(unittest.TestCase):
         text = "私は健康に恵まれている"
         expected = "私は健康に恵まれている"
         name_list = NLP_MTL_Preprocess.generate_name_list_from_replacement_table(replacement_table)
-        tokenizer = FugashiTokenizer(proper_noun_list=name_list)
-        preprocess = NLP_MTL_Preprocess(
-            text=text, 
-            tokenizer=tokenizer,
-            replacement_table=replacement_table,
-        )
-        actual = preprocess.replace()
-        self.assertEqual(actual, expected)    
+        for tokenizer_name, tokenizer in get_tokenizers():
+            tagger = Tagger(tokenizer=tokenizer, proper_noun_list=name_list)
+            preprocess = NLP_MTL_Preprocess(
+                text=text, 
+                tagger=tagger,
+                replacement_table=replacement_table,
+            )
+            with self.subTest(tokenizer_name=tokenizer_name):
+                actual = preprocess.replace()
+                self.assertEqual(actual, expected)    
+
+def get_tokenizers():
+    return [
+        ('Fugashi', FugashiTokenizer()),
+        ('Sudachi', SudachiTokenizer()),
+        ('Spacy', SpacyTokenizer()),
+    ]
 
 
 if __name__ == '__main__':

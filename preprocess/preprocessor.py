@@ -11,7 +11,11 @@ import inquirer
 from preprocess.nlp_mtl_preprocess import NLP_MTL_Preprocess
 from preprocess.mtl_preprocess import MTL_Preprocess
 from preprocess.tokenizer.fugashi_tokenizer import FugashiTokenizer
+from preprocess.tokenizer.sudachi_tokenizer import SudachiTokenizer
+from preprocess.tokenizer.spacy_tokenizer import SpacyTokenizer
+from preprocess.tagger import Tagger
 from preprocess.tools.mecab_dict_generator import MecabDictGenerator
+from preprocess.tools.sudachi_dict_generator import SudachiDictGenerator
 
 class PreprocessorEnvConfig:
     ENV_PREFIX = "PREPROCESSOR"
@@ -85,10 +89,19 @@ def parse_args():
     nlp_setup_parser = nlp_subparsers.add_parser('setup', help="Setup NLP Preprocessor")
     tools_subparsers = subparsers.add_parser('tools', help="Additional preprocessor tools")
     tools_parser = tools_subparsers.add_subparsers(required=True, dest="tools_command")
-    tools_build_dict_parser = tools_parser.add_parser('build_mecab_dict', help="Build a MeCab user dictionary")
-    tools_build_dict_parser.add_argument("dictionary_type", choices=['unidic', "ipadic"])
-    tools_build_dict_parser.add_argument("replacement_json")
-    tools_build_dict_parser.add_argument("dictionary_source_directory")
+    tools_build_mecab_dict_parser = tools_parser.add_parser(
+        'build_mecab_dict', 
+        help="Build a MeCab user dictionary"
+    )
+    tools_build_mecab_dict_parser.add_argument("dictionary_type", choices=['unidic', "ipadic"])
+    tools_build_mecab_dict_parser.add_argument("replacement_json")
+    tools_build_mecab_dict_parser.add_argument("dictionary_source_directory")
+    tools_build_sudachi_dict_parser = tools_parser.add_parser(
+        'build_sudachi_dict',
+         help="Build a Sudachi user dictionary"
+    )
+    tools_build_sudachi_dict_parser.add_argument("replacement_json")
+    tools_build_sudachi_dict_parser.add_argument("dictionary_source_directory")
     return parser.parse_args()
 
 def run_basic_mtl_preprocessor(args):
@@ -112,21 +125,33 @@ def run_nlp_mtl_preprocessor(args):
     with open(args.input_file, "r") as input_file:
         text = input_file.read()
     env_config = PreprocessorEnvConfig.read_env()
-    replacement_table = load_replacement_table(env_config.replacement_table_json)
     if env_config.tokenizer == "fugashi":
-        tokenizer_args = {
-            'tag_potential_proper_nouns':env_config.tag_potential_proper_nouns
-        }
-        if env_config.tag_potential_proper_nouns:
-            tokenizer_args['proper_noun_list'] = NLP_MTL_Preprocess.generate_name_list_from_replacement_table(replacement_table)
         if env_config.use_user_dict:
-            tokenizer_args['user_dic_path'] = env_config.user_dic_path
-        tokenizer = FugashiTokenizer(**tokenizer_args)
+            tokenizer = FugashiTokenizer(user_dic_path=env_config.user_dic_path)
+        else:
+            tokenizer = FugashiTokenizer()
+    elif env_config.tokenizer == "sudachi":
+        if env_config.use_user_dict:
+            tokenizer = SudachiTokenizer(user_dic_path=env_config.user_dic_path)
+        else:
+            tokenizer = SudachiTokenizer()
+    elif env_config.tokenizer == "spacy":
+        if env_config.use_user_dict:
+            tokenizer = SpacyTokenizer(user_dic_path=env_config.user_dic_path)
+        else:
+            tokenizer = SpacyTokenizer()
     else:
         raise ValueError(f"Received unexpected tokenizer: {env_config.tokenizer}")
+    replacement_table = load_replacement_table(env_config.replacement_table_json)
+    proper_noun_list = NLP_MTL_Preprocess.generate_name_list_from_replacement_table(replacement_table)
+    tagger = Tagger(
+        tokenizer=tokenizer,
+        tag_potential_proper_nouns=env_config.tag_potential_proper_nouns,
+        proper_noun_list=proper_noun_list,
+    )
     preprocess = NLP_MTL_Preprocess(
         text=text, 
-        tokenizer=tokenizer, 
+        tagger=tagger, 
         replacement_table=replacement_table,
         verbose=args.verbose,
         single_kanji_filter=env_config.use_single_kanji_filter
@@ -142,7 +167,7 @@ def setup_nlp_mtl_preprocessor():
         inquirer.List(
             "tokenizer",
             message="Select tokenizer",
-            choices=['fugashi']
+            choices=['spacy','sudachi','fugashi']
         ),
         inquirer.Path(
             'replacement_table_json',
@@ -201,6 +226,14 @@ def build_mecab_dict(args):
     )
     dict_generator.generate()
 
+def build_sudachi_dict(args):
+    replacement_table = load_replacement_table(args.replacement_json)
+    dict_generator = SudachiDictGenerator(
+        dictionary_source_directory=args.dictionary_source_directory,
+        replacement_table=replacement_table
+    )
+    dict_generator.generate()
+
 def main():
     args = parse_args()
     if args.preprocessor_type == "basic":
@@ -217,6 +250,8 @@ def main():
     elif args.preprocessor_type == "tools":
         if args.tools_command == "build_mecab_dict":
             build_mecab_dict(args)
+        elif args.tools_command == "build_sudachi_dict":
+            build_sudachi_dict(args)
         else:
             raise Exception(f"Received unexpected tools_command: {args.tools_command}")
     else:

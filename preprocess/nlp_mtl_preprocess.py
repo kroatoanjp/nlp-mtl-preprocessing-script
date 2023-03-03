@@ -10,8 +10,8 @@ from enum import Flag
 from typing import NamedTuple, Optional, List
 import itertools
 
-from preprocess.tokenizer.tokenizer import Tokenizer
-from preprocess.tokenizer.fugashi_tokenizer import FugashiTokenizer
+from preprocess.tagger import Tagger
+from preprocess.tokenizer.part_of_speech import PartOfSpeech
 from preprocess.sentence import Word
 
 # Bitwise flags for parts of names. The __contains__ operation for 
@@ -76,7 +76,7 @@ class NLP_MTL_Preprocess:
 
     def __init__(self, 
             text:str, 
-            tokenizer:Tokenizer, 
+            tagger:Tagger, 
             replacement_table=None, 
             verbose=False,
             single_kanji_filter=True,
@@ -85,7 +85,7 @@ class NLP_MTL_Preprocess:
         # Initialized prior to a rule where is_tokenized_replacement
         # is True
         self.tagged_text = None 
-        self.tokenizer = tokenizer
+        self.tagger = tagger
         if not replacement_table:
             replacement_table = {}
         self.replacement_table = replacement_table
@@ -230,7 +230,7 @@ class NLP_MTL_Preprocess:
                     # Allow replacing single kanji words that have been tagged
                     # as being proper nouns.
                     honorifics_replacement_counts['NA'] = self.replace_tokenized_single_word(
-                        Word(jp_name, "固有名詞"),
+                        Word(jp_name, PartOfSpeech.PROPER_NOUN),
                         en_name
                     )
             total = sum(honorifics_replacement_counts.values())
@@ -259,7 +259,7 @@ class NLP_MTL_Preprocess:
                        not prev_rule or \
                        not prev_rule.is_tokenized_replacement:
                         self._log("No valid tagged text found. Tagging text.")
-                        self.tagged_text = self.tokenizer.tag(self.text)
+                        self.tagged_text = self.tagger.tag(self.text)
                         self._log("Tagged text.")
                     else:
                         self._log("Valid tagged text found.")

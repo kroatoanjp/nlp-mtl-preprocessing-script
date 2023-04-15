@@ -63,7 +63,7 @@
     "共感覚": "Synesthesia",
     "姉上": "Ane-ue",
     "兄上": "Ani-ue",
-    "旦那くん": "Husband-san",
+    "旦那くん": "Husband-kun",
     "奥さん": "Wife-san",
     "姪っ子ちゃん": "Niece-chan",
     "村長くん": "Village Chief-kun",
@@ -169,7 +169,8 @@
     "ミーティア": "Meteor",
     "選帝の儀": "Imperial Selection Ceremony",
     "陽剣": "Yang Sword",
-    "ホロゥ": "Hollow"
+    "ホロゥ": "Hollow",
+    "ゲート": "Gate"
   },
   "basic": {
     "　": " ",
@@ -345,6 +346,7 @@
     "Arakiya": "アラキア",
     "Basu": "バッスー",
     "Beatrice": "ベアトリス",
+    "Betty": "ベティー",
     "Caerulein": "セルレイン",
     "Cain": "カイン",
     "Camberley": "カンバリー",
@@ -465,8 +467,11 @@
   "honorifics": {
     "先輩": "senpai",
     "先生": "sensei",
-    "本職": "私",
-    "ワシ": "私",
-    "主さん": "お前"
+    "さん": "san",
+    "くん": "kun",
+    "ちゃん": "chan",
+    "さま": "sama",
+    "様": "sama",
+    "殿": "dono"
   }
 }

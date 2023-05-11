@@ -1,5 +1,5 @@
 
-# NLP MTL Preprocessing Script
+# NLP MTL Preprocessing Script (Fukuin)
 
 Integrates a JP tokenizer into @thevoidzero's original [MTL preprocessing script](https://github.com/Atreyagaurav/mtl-related-scripts) to avoid unintentional substitutions.
 
